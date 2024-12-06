@@ -5,5 +5,5 @@ const router = express.Router();
 // add a new restaurant
 router.post('/',restaurantController.addNewRestaurant);
 router.get('/:id', restaurantController.getRestaurantById)
-// router.get('/',restaurantController.getAllRestaurants);
+router.get('/',restaurantController.getAllRestaurants);
 module.exports = router;
