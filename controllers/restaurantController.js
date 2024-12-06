@@ -74,7 +74,9 @@ exports.deleteRestaurant = async(req, res) => {
         const restaurantId = req.params.id;
         const restaurant = await Restaurant.findByIdAndDelete(restaurantId);
         if(!restaurant) return res.status(400).json({message:"Restaurant not found"});
+        await MenuItem.deleteMany({restaurant:restaurantId});
         res.status(200).json({message: "deleted successfully", restaurantInfo: restaurant});
+
     } catch (error) {
         res.status(500).json({message: "Mongo DB is down, please try again later", error});
     }
