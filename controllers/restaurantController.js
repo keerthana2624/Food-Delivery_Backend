@@ -54,3 +54,16 @@ exports.getAllRestaurants = async (req, res) => {
         res.status(500).json({message: "Mongo DB is down, please try again later", error});
     }
 }
+
+exports.updateRestaurant = async (req, res) => {
+    try {
+        // const {name, rating} = req.body;
+        const restaurantId = req.params.id;
+        
+        const restaurant = await Restaurant.findByIdAndUpdate(restaurantId, req.body);
+        if(!restaurant) return res.status(400).json({message:"Restaurant not found"});
+        res.status(200).json({message: "Upadated successfully", restaurantInfo: restaurant});
+    } catch (error) {
+        res.status(500).json({message: "Mongo DB is down, please try again later", error});
+    }
+}
