@@ -7,4 +7,5 @@ const restaurantSchema = new mongoose.Schema({
     menuItems: [{type:mongoose.Schema.ObjectId,ref: 'MenuItem'}]
 })
 
+module.exports = mongoose.model('Restaurant', restaurantSchema);
 
