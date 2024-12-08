@@ -54,3 +54,33 @@ exports.removeFromCart = async (req, res) => {
         res.status(500).json({ message: 'Failed to remove item from cart', error });
     }
 };
+
+
+
+// Update the quantity of a menu item in the cart
+exports.updateCartItemQuantity = async (req, res) => {
+    const { userId, menuItemId, quantity } = req.body;
+
+    try {
+        const cart = await Cart.findOne({ userId });
+
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        // Find the menu item and update its quantity
+        const item = cart.items.find(item => item.menuItem.toString() === menuItemId);
+
+        if (!item) {
+            return res.status(404).json({ message: 'Item not found in cart' });
+        }
+
+        item.quantity = quantity;
+
+        await cart.save();
+
+        res.status(200).json({ message: 'Item quantity updated', cart });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update item quantity', error });
+    }
+};
