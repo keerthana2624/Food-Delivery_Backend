@@ -30,3 +30,27 @@ exports.addToCart = async (req, res) => {
         res.status(500).json({ message: 'Failed to add item to cart', error });
     }
 };
+
+
+
+// Remove a menu item from the cart
+exports.removeFromCart = async (req, res) => {
+    const { userId, menuItemId } = req.body;
+
+    try {
+        const cart = await Cart.findOne({ userId });
+
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        // Remove the menu item from the cart
+        cart.items = cart.items.filter(item => item.menuItem.toString() !== menuItemId);
+
+        await cart.save();
+
+        res.status(200).json({ message: 'Item removed from cart', cart });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to remove item from cart', error });
+    }
+};
