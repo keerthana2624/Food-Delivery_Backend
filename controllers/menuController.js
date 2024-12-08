@@ -68,3 +68,25 @@ exports.updateMenuItem = async (req, res) => {
     }
 };
 
+
+// Delete a menu item
+exports.deleteMenuItem = async (req, res) => {
+    const { menuItemId } = req.params;
+
+    try {
+        const menuItem = await MenuItem.findByIdAndDelete(menuItemId);
+        if (!menuItem) {
+            return res.status(404).json({ message: 'Menu item not found' });
+        }
+
+        // Remove menu item from the associated restaurant
+        await Restaurant.findByIdAndUpdate(menuItem.restaurant, {
+            $pull: { menuItems: menuItemId },
+        });
+
+        res.status(200).json({ message: 'Menu item deleted successfully', menuItem });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to delete menu item', error });
+    }
+};
+
