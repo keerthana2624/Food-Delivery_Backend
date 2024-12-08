@@ -32,3 +32,62 @@ exports.addMenuItem = async (req, res) => {
         res.status(500).json({ message: 'Failed to add menu item', error });
     }
 };
+
+
+// Get all menu items for a specific restaurant
+exports.getMenuItemsByRestaurantId = async (req, res) => {
+    const { restaurantId } = req.params;
+
+    try {
+        const menuItems = await MenuItem.find({ restaurant: restaurantId });
+        if (!menuItems.length) {
+            return res.status(404).json({ message: 'No menu items found for this restaurant' });
+        }
+
+        res.status(200).json(menuItems);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve menu items', error });
+    }
+};
+
+
+
+// Update a menu item
+exports.updateMenuItem = async (req, res) => {
+    const { menuItemId } = req.params;
+    const updateData = req.body;
+
+    try {
+        const updatedMenuItem = await MenuItem.findByIdAndUpdate(menuItemId, updateData, { new: true });
+        if (!updatedMenuItem) {
+            return res.status(404).json({ message: 'Menu item not found' });
+        }
+
+        res.status(200).json({ message: 'Menu item updated successfully', menuItem: updatedMenuItem });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update menu item', error });
+    }
+};
+
+// Delete a menu item
+exports.deleteMenuItem = async (req, res) => {
+    const { menuItemId } = req.params;
+
+    try {
+        const menuItem = await MenuItem.findByIdAndDelete(menuItemId);
+        if (!menuItem) {
+            return res.status(404).json({ message: 'Menu item not found' });
+        }
+
+        // Remove menu item from the associated restaurant
+        await Restaurant.findByIdAndUpdate(menuItem.restaurant, {
+            $pull: { menuItems: menuItemId },
+        });
+
+        res.status(200).json({ message: 'Menu item deleted successfully', menuItem });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to delete menu item', error });
+    }
+};
+
+
