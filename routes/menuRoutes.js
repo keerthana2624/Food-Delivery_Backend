@@ -4,7 +4,8 @@ const router = express.Router();
 
 // Route to add a new menu item
 router.post('/', menuController.addMenuItem);
-
+// Route to get menu items by restaurant ID
+router.get('/:restaurantId', menuController.getMenuItemsByRestaurantId);
 
 
 module.exports = router;
