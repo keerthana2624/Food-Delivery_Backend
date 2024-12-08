@@ -8,5 +8,8 @@ router.post('/', menuController.addMenuItem);
 router.get('/:restaurantId', menuController.getMenuItemsByRestaurantId);
 // Route to update a menu item
 router.put('/:menuItemId', menuController.updateMenuItem);
+// Route to delete a menu item
+router.delete('/:menuItemId', menuController.deleteMenuItem);
+
 
 module.exports = router;
