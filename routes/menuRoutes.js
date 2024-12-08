@@ -6,6 +6,7 @@ const router = express.Router();
 router.post('/', menuController.addMenuItem);
 // Route to get menu items by restaurant ID
 router.get('/:restaurantId', menuController.getMenuItemsByRestaurantId);
-
+// Route to update a menu item
+router.put('/:menuItemId', menuController.updateMenuItem);
 
 module.exports = router;
