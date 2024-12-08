@@ -84,3 +84,21 @@ exports.updateCartItemQuantity = async (req, res) => {
         res.status(500).json({ message: 'Failed to update item quantity', error });
     }
 };
+
+
+// Get all cart items for a user
+exports.getCartItemsByUserId = async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const cart = await Cart.findOne({ userId }).populate('items.menuItem');
+
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        res.status(200).json(cart);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve cart items', error });
+    }
+};
