@@ -32,3 +32,20 @@ exports.addMenuItem = async (req, res) => {
         res.status(500).json({ message: 'Failed to add menu item', error });
     }
 };
+
+
+// Get all menu items for a specific restaurant
+exports.getMenuItemsByRestaurantId = async (req, res) => {
+    const { restaurantId } = req.params;
+
+    try {
+        const menuItems = await MenuItem.find({ restaurant: restaurantId });
+        if (!menuItems.length) {
+            return res.status(404).json({ message: 'No menu items found for this restaurant' });
+        }
+
+        res.status(200).json(menuItems);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve menu items', error });
+    }
+};
