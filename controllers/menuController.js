@@ -49,3 +49,23 @@ exports.getMenuItemsByRestaurantId = async (req, res) => {
         res.status(500).json({ message: 'Failed to retrieve menu items', error });
     }
 };
+
+
+
+// Update a menu item
+exports.updateMenuItem = async (req, res) => {
+    const { menuItemId } = req.params;
+    const updateData = req.body;
+
+    try {
+        const updatedMenuItem = await MenuItem.findByIdAndUpdate(menuItemId, updateData, { new: true });
+        if (!updatedMenuItem) {
+            return res.status(404).json({ message: 'Menu item not found' });
+        }
+
+        res.status(200).json({ message: 'Menu item updated successfully', menuItem: updatedMenuItem });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update menu item', error });
+    }
+};
+
