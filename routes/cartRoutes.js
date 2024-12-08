@@ -10,4 +10,9 @@ router.post('/add', cartController.addToCart);
 router.delete('/remove', cartController.removeFromCart);
 // Update the quantity of a menu item in the cart
 router.put('/update', cartController.updateCartItemQuantity);
+// Get all cart items for a user by user ID
+router.get('/:userId', cartController.getCartItemsByUserId);
+
+
+
 module.exports = router;
